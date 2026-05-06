@@ -1,0 +1,68 @@
+{
+  "_example": "operation-event-ledger",
+  "_description": "OperationEventLedgerEntry records capturing OperationEvents as immutable ledger entries.",
+  "ledger_entries": [
+    {
+      "schema_version": "0.1.0",
+      "ledger_entry_id": "le_upload_created_001",
+      "event_id": "evt_upload_created_001",
+      "event_type": "workspace.operation.created",
+      "operation_id": "op_upload_001",
+      "actor": {
+        "actor_type": "user",
+        "actor_id": "user_local_demo"
+      },
+      "occurred_at": "2026-05-05T00:00:00Z",
+      "recorded_at": "2026-05-05T00:00:00Z",
+      "trace_id": "trace_upload_001",
+      "span_id": "span_create_001",
+      "source_service": "SocioProphet/prophet-platform",
+      "payload": {
+        "operation_type": "upload.import"
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "ledger_entry_id": "le_upload_artifact_admitted_001",
+      "event_id": "evt_upload_artifact_admitted_001",
+      "event_type": "workspace.operation.artifact_admitted",
+      "operation_id": "op_upload_001",
+      "task_id": "task_upload_001",
+      "artifact_id": "artifact_readme_001",
+      "actor": {
+        "actor_type": "system",
+        "actor_id": "operation-runtime"
+      },
+      "occurred_at": "2026-05-05T00:00:08Z",
+      "recorded_at": "2026-05-05T00:00:08Z",
+      "trace_id": "trace_upload_001",
+      "span_id": "span_admit_001",
+      "source_service": "SocioProphet/prophet-platform",
+      "payload": {
+        "admission_state": "admitted"
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "ledger_entry_id": "le_op_policy_blocked_001",
+      "event_id": "evt_policy_blocked_001",
+      "event_type": "workspace.operation.policy_blocked",
+      "operation_id": "op_import_policy_001",
+      "artifact_id": "artifact_import_001",
+      "actor": {
+        "actor_type": "system",
+        "actor_id": "policy-runtime"
+      },
+      "occurred_at": "2026-05-05T00:20:05Z",
+      "recorded_at": "2026-05-05T00:20:05Z",
+      "trace_id": "trace_import_policy_001",
+      "span_id": "span_policy_blocked_001",
+      "source_service": "SocioProphet/policy-fabric",
+      "payload": {
+        "gate_id": "gate_import_secret_001",
+        "gate_type": "security.secret_detected",
+        "responsible_actor": "workspace_owner"
+      }
+    }
+  ]
+}

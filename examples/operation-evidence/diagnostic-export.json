@@ -1,0 +1,37 @@
+{
+  "_example": "diagnostic-export",
+  "_description": "DiagnosticExportEvidence confirming redaction was applied without storing raw secrets.",
+  "diagnostic_evidence": [
+    {
+      "schema_version": "0.1.0",
+      "diagnostic_evidence_id": "de_browser_diag_001",
+      "operation_id": "op_browser_capture_001",
+      "task_id": "task_diag_export_001",
+      "artifact_id": "artifact_browser_diag_001",
+      "diagnostic_bundle_id": "diag_export_001",
+      "actor": {
+        "actor_type": "system",
+        "actor_id": "sourceos-devtools"
+      },
+      "command": "ExportDiagnostics",
+      "result": "success",
+      "redaction_applied": true,
+      "contains_raw_credentials": false,
+      "redaction_rules": [
+        "cookies",
+        "bearer_tokens",
+        "oauth_tokens",
+        "api_keys",
+        "authorization_headers",
+        "session_ids",
+        "tenant_ids_when_sensitive",
+        "file_ids_when_sensitive",
+        "model_prompts_when_sensitive"
+      ],
+      "trace_id": "trace_browser_capture_001",
+      "span_id": "span_diag_export_001",
+      "timestamp": "2026-05-05T00:40:00Z",
+      "source_service": "SocioProphet/prophet-platform"
+    }
+  ]
+}

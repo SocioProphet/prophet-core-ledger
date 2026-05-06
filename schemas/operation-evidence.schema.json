@@ -1,0 +1,475 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/ledger/v0.1/operation-evidence.schema.json",
+  "title": "OperationEvidenceLedger",
+  "description": "Ledger and evidence records for the Workspace Operation Plane. All records are append-only and represent auditable evidence of operation lifecycle events, artifact admission, policy gates, agent actions, decisions, diagnostics, compensation, and releases.",
+  "type": "object",
+  "oneOf": [
+    { "$ref": "#/$defs/OperationEvidenceRecord" },
+    { "$ref": "#/$defs/OperationEventLedgerEntry" },
+    { "$ref": "#/$defs/ArtifactAdmissionEvidence" },
+    { "$ref": "#/$defs/PolicyGateEvidence" },
+    { "$ref": "#/$defs/DecisionEvidence" },
+    { "$ref": "#/$defs/AgentActionEvidence" },
+    { "$ref": "#/$defs/DiagnosticExportEvidence" },
+    { "$ref": "#/$defs/CompensationEvidence" },
+    { "$ref": "#/$defs/ReleaseOperationEvidence" }
+  ],
+  "$defs": {
+    "OperationEvidenceRecord": {
+      "description": "Core evidence record for operation lifecycle events: create, start, progress, failure, retry, cancel, complete, and compensate.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "evidence_record_id",
+        "operation_id",
+        "operation_phase",
+        "actor",
+        "command",
+        "result",
+        "timestamp",
+        "source_service"
+      ],
+      "properties": {
+        "schema_version": { "const": "0.1.0" },
+        "evidence_record_id": { "type": "string", "minLength": 1 },
+        "operation_id": { "type": "string", "minLength": 1 },
+        "operation_phase": {
+          "type": "string",
+          "enum": [
+            "create",
+            "preflight",
+            "start",
+            "progress",
+            "pause",
+            "resume",
+            "retry",
+            "cancel",
+            "failure",
+            "complete",
+            "compensate"
+          ]
+        },
+        "actor": { "$ref": "#/$defs/actor" },
+        "delegated_by": { "$ref": "#/$defs/actor" },
+        "command": { "type": "string", "minLength": 1 },
+        "result": { "$ref": "#/$defs/result" },
+        "reason": { "type": "string" },
+        "task_id": { "type": "string" },
+        "trace_id": { "type": "string" },
+        "span_id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "source_service": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "OperationEventLedgerEntry": {
+      "description": "Immutable ledger entry that records an OperationEvent emitted by the Operation Plane runtime. Captures the event exactly as emitted, with ledger-specific metadata.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "ledger_entry_id",
+        "event_id",
+        "event_type",
+        "operation_id",
+        "actor",
+        "occurred_at",
+        "recorded_at",
+        "source_service"
+      ],
+      "properties": {
+        "schema_version": { "const": "0.1.0" },
+        "ledger_entry_id": { "type": "string", "minLength": 1 },
+        "event_id": { "type": "string", "minLength": 1 },
+        "event_type": { "type": "string", "minLength": 1 },
+        "operation_id": { "type": "string", "minLength": 1 },
+        "task_id": { "type": "string" },
+        "artifact_id": { "type": "string" },
+        "actor": { "$ref": "#/$defs/actor" },
+        "delegated_by": { "$ref": "#/$defs/actor" },
+        "occurred_at": { "type": "string", "format": "date-time" },
+        "recorded_at": { "type": "string", "format": "date-time" },
+        "trace_id": { "type": "string" },
+        "span_id": { "type": "string" },
+        "source_service": { "type": "string", "minLength": 1 },
+        "payload": { "type": "object", "additionalProperties": true }
+      }
+    },
+
+    "ArtifactAdmissionEvidence": {
+      "description": "Evidence of artifact admission gate evaluation. Records which gates were evaluated, the final admission state, and the actor responsible.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "admission_evidence_id",
+        "operation_id",
+        "artifact_id",
+        "admission_state",
+        "actor",
+        "command",
+        "result",
+        "gate_results",
+        "timestamp",
+        "source_service"
+      ],
+      "properties": {
+        "schema_version": { "const": "0.1.0" },
+        "admission_evidence_id": { "type": "string", "minLength": 1 },
+        "operation_id": { "type": "string", "minLength": 1 },
+        "artifact_id": { "type": "string", "minLength": 1 },
+        "task_id": { "type": "string" },
+        "admission_state": {
+          "type": "string",
+          "enum": [
+            "not_stored",
+            "stored",
+            "quarantined",
+            "pending_metadata",
+            "pending_policy",
+            "pending_encryption",
+            "pending_scan",
+            "admitted",
+            "activated",
+            "rejected",
+            "archived"
+          ]
+        },
+        "actor": { "$ref": "#/$defs/actor" },
+        "delegated_by": { "$ref": "#/$defs/actor" },
+        "command": { "type": "string", "minLength": 1 },
+        "result": { "$ref": "#/$defs/result" },
+        "reason": { "type": "string" },
+        "gate_results": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/gate_result_summary" }
+        },
+        "trace_id": { "type": "string" },
+        "span_id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "source_service": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "PolicyGateEvidence": {
+      "description": "Evidence of a policy gate evaluation result, including overrides and remediation paths. Records the responsible actor and any override decision.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "gate_evidence_id",
+        "operation_id",
+        "policy_gate_id",
+        "gate_type",
+        "gate_status",
+        "actor",
+        "responsible_actor",
+        "command",
+        "result",
+        "explanation",
+        "timestamp",
+        "source_service"
+      ],
+      "properties": {
+        "schema_version": { "const": "0.1.0" },
+        "gate_evidence_id": { "type": "string", "minLength": 1 },
+        "operation_id": { "type": "string", "minLength": 1 },
+        "policy_gate_id": { "type": "string", "minLength": 1 },
+        "artifact_id": { "type": "string" },
+        "task_id": { "type": "string" },
+        "gate_type": { "type": "string", "minLength": 1 },
+        "gate_status": {
+          "type": "string",
+          "enum": [
+            "passed",
+            "warning",
+            "blocking",
+            "requires_decision",
+            "requires_admin",
+            "unavailable"
+          ]
+        },
+        "actor": { "$ref": "#/$defs/actor" },
+        "delegated_by": { "$ref": "#/$defs/actor" },
+        "responsible_actor": { "$ref": "#/$defs/responsible_actor" },
+        "command": { "type": "string", "minLength": 1 },
+        "result": { "$ref": "#/$defs/result" },
+        "explanation": { "type": "string", "minLength": 1 },
+        "remediation_path": { "type": "array", "items": { "type": "string" } },
+        "override_decision": { "type": "string" },
+        "override_actor": { "$ref": "#/$defs/actor" },
+        "trace_id": { "type": "string" },
+        "span_id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "source_service": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "DecisionEvidence": {
+      "description": "Evidence of a decision card resolution. Records who decided, which option was selected, and the decision type and context.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "decision_evidence_id",
+        "operation_id",
+        "decision_id",
+        "decision_type",
+        "selected_option",
+        "actor",
+        "command",
+        "result",
+        "timestamp",
+        "source_service"
+      ],
+      "properties": {
+        "schema_version": { "const": "0.1.0" },
+        "decision_evidence_id": { "type": "string", "minLength": 1 },
+        "operation_id": { "type": "string", "minLength": 1 },
+        "decision_id": { "type": "string", "minLength": 1 },
+        "artifact_id": { "type": "string" },
+        "task_id": { "type": "string" },
+        "decision_type": { "type": "string", "minLength": 1 },
+        "selected_option": { "type": "string", "minLength": 1 },
+        "actor": { "$ref": "#/$defs/actor" },
+        "delegated_by": { "$ref": "#/$defs/actor" },
+        "command": { "type": "string", "minLength": 1 },
+        "result": { "$ref": "#/$defs/result" },
+        "reason": { "type": "string" },
+        "trace_id": { "type": "string" },
+        "span_id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "source_service": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "AgentActionEvidence": {
+      "description": "Evidence of an agent action taken with delegated authority. Records the delegation chain, scope, and outcome.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "agent_action_evidence_id",
+        "operation_id",
+        "actor",
+        "delegated_by",
+        "agent_scope",
+        "command",
+        "result",
+        "timestamp",
+        "source_service"
+      ],
+      "properties": {
+        "schema_version": { "const": "0.1.0" },
+        "agent_action_evidence_id": { "type": "string", "minLength": 1 },
+        "operation_id": { "type": "string", "minLength": 1 },
+        "task_id": { "type": "string" },
+        "artifact_id": { "type": "string" },
+        "actor": { "$ref": "#/$defs/actor" },
+        "delegated_by": { "$ref": "#/$defs/actor" },
+        "agent_scope": { "type": "string", "minLength": 1 },
+        "command": { "type": "string", "minLength": 1 },
+        "result": { "$ref": "#/$defs/result" },
+        "reason": { "type": "string" },
+        "capability_refs": { "type": "array", "items": { "type": "string" } },
+        "trace_id": { "type": "string" },
+        "span_id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "source_service": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "DiagnosticExportEvidence": {
+      "description": "Evidence that a diagnostic bundle was exported with redaction applied. Confirms no raw secrets or credentials are included without storing raw content.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "diagnostic_evidence_id",
+        "operation_id",
+        "actor",
+        "command",
+        "result",
+        "redaction_applied",
+        "contains_raw_credentials",
+        "redaction_rules",
+        "timestamp",
+        "source_service"
+      ],
+      "properties": {
+        "schema_version": { "const": "0.1.0" },
+        "diagnostic_evidence_id": { "type": "string", "minLength": 1 },
+        "operation_id": { "type": "string", "minLength": 1 },
+        "task_id": { "type": "string" },
+        "artifact_id": { "type": "string" },
+        "diagnostic_bundle_id": { "type": "string" },
+        "actor": { "$ref": "#/$defs/actor" },
+        "delegated_by": { "$ref": "#/$defs/actor" },
+        "command": { "type": "string", "minLength": 1 },
+        "result": { "$ref": "#/$defs/result" },
+        "redaction_applied": { "type": "boolean" },
+        "contains_raw_credentials": { "const": false },
+        "redaction_rules": { "type": "array", "items": { "type": "string" } },
+        "trace_id": { "type": "string" },
+        "span_id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "source_service": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "CompensationEvidence": {
+      "description": "Evidence of a compensation action taken against a failed or canceled operation. Records which tasks were compensated and the outcome.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "compensation_evidence_id",
+        "operation_id",
+        "compensation_type",
+        "compensated_task_ids",
+        "actor",
+        "command",
+        "result",
+        "timestamp",
+        "source_service"
+      ],
+      "properties": {
+        "schema_version": { "const": "0.1.0" },
+        "compensation_evidence_id": { "type": "string", "minLength": 1 },
+        "operation_id": { "type": "string", "minLength": 1 },
+        "task_id": { "type": "string" },
+        "compensation_type": {
+          "type": "string",
+          "enum": [
+            "rollback",
+            "undo",
+            "reverse_artifact",
+            "soft_delete",
+            "archive",
+            "notify_only",
+            "manual_required"
+          ]
+        },
+        "compensated_task_ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "actor": { "$ref": "#/$defs/actor" },
+        "delegated_by": { "$ref": "#/$defs/actor" },
+        "command": { "type": "string", "minLength": 1 },
+        "result": { "$ref": "#/$defs/result" },
+        "reason": { "type": "string" },
+        "trace_id": { "type": "string" },
+        "span_id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "source_service": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "ReleaseOperationEvidence": {
+      "description": "Evidence of a release operation completing. Records the release type, included artifacts, and audit trail.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "release_evidence_id",
+        "operation_id",
+        "release_type",
+        "release_artifact_ids",
+        "actor",
+        "command",
+        "result",
+        "timestamp",
+        "source_service"
+      ],
+      "properties": {
+        "schema_version": { "const": "0.1.0" },
+        "release_evidence_id": { "type": "string", "minLength": 1 },
+        "operation_id": { "type": "string", "minLength": 1 },
+        "task_id": { "type": "string" },
+        "release_type": { "type": "string", "minLength": 1 },
+        "release_artifact_ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "actor": { "$ref": "#/$defs/actor" },
+        "delegated_by": { "$ref": "#/$defs/actor" },
+        "command": { "type": "string", "minLength": 1 },
+        "result": { "$ref": "#/$defs/result" },
+        "reason": { "type": "string" },
+        "source_ref": { "type": "string" },
+        "trace_id": { "type": "string" },
+        "span_id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "source_service": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actor_type", "actor_id"],
+      "properties": {
+        "actor_type": {
+          "type": "string",
+          "enum": ["user", "agent", "system", "connector", "worker"]
+        },
+        "actor_id": { "type": "string", "minLength": 1 },
+        "display_name": { "type": "string" }
+      }
+    },
+
+    "responsible_actor": {
+      "type": "string",
+      "enum": [
+        "current_user",
+        "workspace_owner",
+        "tenant_admin",
+        "external_owner",
+        "connector_owner",
+        "model_provider",
+        "local_device_owner",
+        "agent_operator",
+        "system"
+      ]
+    },
+
+    "result": {
+      "type": "string",
+      "enum": [
+        "success",
+        "failure",
+        "partial",
+        "skipped",
+        "canceled",
+        "compensated",
+        "pending"
+      ]
+    },
+
+    "gate_result_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gate_id", "gate_type", "status"],
+      "properties": {
+        "gate_id": { "type": "string" },
+        "gate_type": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": [
+            "passed",
+            "warning",
+            "blocking",
+            "requires_decision",
+            "requires_admin",
+            "unavailable"
+          ]
+        },
+        "explanation": { "type": "string" }
+      }
+    }
+  }
+}

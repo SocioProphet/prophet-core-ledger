@@ -1,0 +1,50 @@
+{
+  "_example": "compensation",
+  "_description": "CompensationEvidence for a rolled-back operation after partial failure.",
+  "compensation_evidence": [
+    {
+      "schema_version": "0.1.0",
+      "compensation_evidence_id": "comp_ev_partial_fail_001",
+      "operation_id": "op_import_partial_001",
+      "task_id": "task_import_partial_001",
+      "compensation_type": "rollback",
+      "compensated_task_ids": [
+        "task_import_transfer_001",
+        "task_import_index_001"
+      ],
+      "actor": {
+        "actor_type": "system",
+        "actor_id": "operation-runtime"
+      },
+      "command": "CompensateOperation",
+      "result": "compensated",
+      "reason": "Partial import failed at indexing stage. Transfer task rolled back to preserve consistency.",
+      "trace_id": "trace_import_partial_001",
+      "span_id": "span_compensate_001",
+      "timestamp": "2026-05-05T00:08:30Z",
+      "source_service": "SocioProphet/prophet-platform"
+    },
+    {
+      "schema_version": "0.1.0",
+      "compensation_evidence_id": "comp_ev_agent_patch_reject_001",
+      "operation_id": "op_agent_patch_001",
+      "compensation_type": "reverse_artifact",
+      "compensated_task_ids": ["task_agent_patch_001"],
+      "actor": {
+        "actor_type": "system",
+        "actor_id": "operation-runtime"
+      },
+      "delegated_by": {
+        "actor_type": "user",
+        "actor_id": "user_local_demo"
+      },
+      "command": "CompensateOperation",
+      "result": "compensated",
+      "reason": "User rejected proposed patch artifact. Patch artifact reverted to inactive state.",
+      "trace_id": "trace_agent_patch_001",
+      "span_id": "span_compensate_002",
+      "timestamp": "2026-05-05T00:13:00Z",
+      "source_service": "SocioProphet/prophet-platform"
+    }
+  ]
+}

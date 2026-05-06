@@ -1,0 +1,79 @@
+{
+  "_example": "policy-gate",
+  "_description": "PolicyGateEvidence for a blocking gate, an admin-override resolution, and a passed gate.",
+  "policy_gate_evidence": [
+    {
+      "schema_version": "0.1.0",
+      "gate_evidence_id": "pge_secret_blocking_001",
+      "operation_id": "op_import_policy_001",
+      "policy_gate_id": "gate_import_secret_001",
+      "artifact_id": "artifact_config_001",
+      "gate_type": "security.secret_detected",
+      "gate_status": "blocking",
+      "actor": {
+        "actor_type": "system",
+        "actor_id": "policy-runtime"
+      },
+      "responsible_actor": "workspace_owner",
+      "command": "AdmitArtifact",
+      "result": "failure",
+      "explanation": "API key pattern detected in artifact. Artifact quarantined. Workspace owner must review and either remove secrets or approve an exception.",
+      "remediation_path": [
+        "Remove secrets from artifact and re-upload",
+        "Request override via RequestOverride command with workspace_owner approval"
+      ],
+      "trace_id": "trace_import_policy_001",
+      "span_id": "span_gate_blocking_001",
+      "timestamp": "2026-05-05T00:20:05Z",
+      "source_service": "SocioProphet/policy-fabric"
+    },
+    {
+      "schema_version": "0.1.0",
+      "gate_evidence_id": "pge_secret_override_001",
+      "operation_id": "op_import_policy_001",
+      "policy_gate_id": "gate_import_secret_001",
+      "artifact_id": "artifact_config_001",
+      "gate_type": "security.secret_detected",
+      "gate_status": "requires_admin",
+      "actor": {
+        "actor_type": "user",
+        "actor_id": "user_workspace_owner",
+        "display_name": "Workspace Owner"
+      },
+      "responsible_actor": "workspace_owner",
+      "command": "RequestOverride",
+      "result": "success",
+      "explanation": "Workspace owner approved override. Artifact admitted under exception policy.",
+      "remediation_path": ["Exception approved by workspace_owner: test credentials only"],
+      "override_decision": "exception_approved: artifact contains test credentials only, not production secrets",
+      "override_actor": {
+        "actor_type": "user",
+        "actor_id": "user_workspace_owner"
+      },
+      "trace_id": "trace_import_policy_001",
+      "span_id": "span_gate_override_001",
+      "timestamp": "2026-05-05T00:25:30Z",
+      "source_service": "SocioProphet/policy-fabric"
+    },
+    {
+      "schema_version": "0.1.0",
+      "gate_evidence_id": "pge_release_passed_001",
+      "operation_id": "op_release_package_001",
+      "policy_gate_id": "gate_release_evidence_001",
+      "gate_type": "release.evidence_required",
+      "gate_status": "passed",
+      "actor": {
+        "actor_type": "system",
+        "actor_id": "policy-runtime"
+      },
+      "responsible_actor": "system",
+      "command": "StartOperation",
+      "result": "success",
+      "explanation": "Release package includes source reference, checksum, build/test evidence, and rollback note.",
+      "trace_id": "trace_release_package_001",
+      "span_id": "span_gate_passed_001",
+      "timestamp": "2026-05-05T01:30:35Z",
+      "source_service": "SocioProphet/policy-fabric"
+    }
+  ]
+}
