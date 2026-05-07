@@ -1,0 +1,29 @@
+{
+  "ledger_entry_id": "ledger:decision:0001",
+  "entry_type": "DECISION_LEDGER_EVENT",
+  "schema_ref": "https://schemas.socioprophet.org/prophet/decision-ledger-entry.v0.1.schema.json",
+  "decision_id": "did:feature-promotion-0001",
+  "decision_type": "FEATURE_PROMOTION",
+  "policy_id": "decision-world-signal-policy@0.1.0",
+  "input_artifact_hashes": [
+    "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  ],
+  "candidate_ids": [
+    "gaia.weather.15_minute_forecast"
+  ],
+  "selected_id": "gaia.weather.15_minute_forecast",
+  "rule_trace": [
+    {
+      "rule_id": "feature_requires_manifest",
+      "outcome": "passed"
+    },
+    {
+      "rule_id": "feature_requires_provenance_requirements",
+      "outcome": "passed"
+    }
+  ],
+  "confidence": 1.0,
+  "responsible_actor": "actor:contract-reviewer",
+  "created_at": "2026-05-06T00:00:00Z",
+  "replay_instructions": "Re-validate the decision ledger entry against the policy, input artifact hashes, and rule trace."
+}
