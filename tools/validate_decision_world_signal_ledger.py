@@ -17,9 +17,19 @@ GUIDE = ROOT / "ledger" / "decision-world-signals" / "README.md"
 ENTRY_TYPES = {
     "FEATURE_PROMOTION_EVENT",
     "ENERGY_LEDGER_EVENT",
+    "DECISION_LEDGER_EVENT",
     "PROOF_ARTIFACT_EVENT",
 }
 
+DECISION_TYPES = {
+    "MATCH",
+    "MERGE",
+    "SPLIT",
+    "ATTRIBUTE_SURVIVORSHIP",
+    "FEATURE_PROMOTION",
+    "ACTION_ADMISSION",
+    "POLICY_BLOCK",
+}
 PROMOTION_STATES = {"EVIDENCE_ONLY", "REVIEW", "REJECTED", "PROMOTED"}
 PROMOTION_DECISIONS = {"REJECT", "REVIEW", "INSERT_EVIDENCE_ONLY", "PROMOTE_CANONICAL"}
 PROOF_STATUSES = {"PROVED", "VIOLATED", "UNKNOWN", "TIMEOUT", "PRECISION_LOSS_REVIEW_REQUIRED"}
@@ -89,6 +99,34 @@ def validate_energy(path: Path, data: dict[str, Any]) -> list[str]:
     return errors
 
 
+def validate_decision(path: Path, data: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    validate_common(path, data, errors)
+    required = [
+        "decision_id",
+        "decision_type",
+        "policy_id",
+        "input_artifact_hashes",
+        "candidate_ids",
+        "rule_trace",
+        "confidence",
+        "responsible_actor",
+    ]
+    for field in required:
+        require(path, data, field, errors)
+    if data.get("decision_type") not in DECISION_TYPES:
+        errors.append(f"{path}: invalid decision_type {data.get('decision_type')!r}")
+    confidence = data.get("confidence")
+    if isinstance(confidence, (int, float)) and not 0 <= confidence <= 1:
+        errors.append(f"{path}: confidence must be between 0 and 1")
+    trace = data.get("rule_trace")
+    if isinstance(trace, list):
+        for idx, rule in enumerate(trace):
+            if not isinstance(rule, dict) or not rule.get("rule_id") or not rule.get("outcome"):
+                errors.append(f"{path}: rule_trace[{idx}] requires rule_id and outcome")
+    return errors
+
+
 def validate_proof(path: Path, data: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     validate_common(path, data, errors)
@@ -106,6 +144,7 @@ def validate_proof(path: Path, data: dict[str, Any]) -> list[str]:
 VALIDATORS = {
     "feature-promotion-event.json": validate_feature_promotion,
     "energy-ledger-event.json": validate_energy,
+    "decision-ledger-event.json": validate_decision,
     "proof-artifact-event.json": validate_proof,
 }
 
