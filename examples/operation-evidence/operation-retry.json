@@ -1,0 +1,60 @@
+{
+  "_example": "operation-retry",
+  "_description": "OperationEvidenceRecord examples for task failure, retry, and eventual success.",
+  "evidence_records": [
+    {
+      "schema_version": "0.1.0",
+      "evidence_record_id": "er_op_fail_001",
+      "operation_id": "op_import_retry_001",
+      "operation_phase": "failure",
+      "actor": {
+        "actor_type": "system",
+        "actor_id": "operation-runtime"
+      },
+      "command": "StartOperation",
+      "result": "failure",
+      "reason": "network_timeout: upstream connector unreachable after 3 attempts",
+      "task_id": "task_import_001",
+      "trace_id": "trace_import_retry_001",
+      "span_id": "span_fail_001",
+      "timestamp": "2026-05-05T00:05:10Z",
+      "source_service": "SocioProphet/prophet-platform"
+    },
+    {
+      "schema_version": "0.1.0",
+      "evidence_record_id": "er_op_retry_001",
+      "operation_id": "op_import_retry_001",
+      "operation_phase": "retry",
+      "actor": {
+        "actor_type": "user",
+        "actor_id": "user_local_demo",
+        "display_name": "Local Demo User"
+      },
+      "command": "RetryTask",
+      "result": "pending",
+      "reason": "user_requested_retry",
+      "task_id": "task_import_001",
+      "trace_id": "trace_import_retry_001",
+      "span_id": "span_retry_001",
+      "timestamp": "2026-05-05T00:05:45Z",
+      "source_service": "SocioProphet/prophet-platform"
+    },
+    {
+      "schema_version": "0.1.0",
+      "evidence_record_id": "er_op_complete_002",
+      "operation_id": "op_import_retry_001",
+      "operation_phase": "complete",
+      "actor": {
+        "actor_type": "system",
+        "actor_id": "operation-runtime"
+      },
+      "command": "RetryTask",
+      "result": "success",
+      "task_id": "task_import_001",
+      "trace_id": "trace_import_retry_001",
+      "span_id": "span_complete_002",
+      "timestamp": "2026-05-05T00:06:02Z",
+      "source_service": "SocioProphet/prophet-platform"
+    }
+  ]
+}

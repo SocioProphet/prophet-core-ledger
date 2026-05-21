@@ -1,0 +1,47 @@
+{
+  "_example": "decision",
+  "_description": "DecisionEvidence for a user resolving an agent patch admission decision.",
+  "decision_evidence": [
+    {
+      "schema_version": "0.1.0",
+      "decision_evidence_id": "de_patch_admit_001",
+      "operation_id": "op_agent_patch_001",
+      "decision_id": "decision_review_patch_001",
+      "artifact_id": "artifact_patch_001",
+      "decision_type": "agent_artifact_admission",
+      "selected_option": "admit",
+      "actor": {
+        "actor_type": "user",
+        "actor_id": "user_local_demo",
+        "display_name": "Local Demo User"
+      },
+      "command": "ResolveDecision",
+      "result": "success",
+      "reason": "Patch reviewed and approved. Changes are safe for workspace admission.",
+      "trace_id": "trace_agent_patch_001",
+      "span_id": "span_decision_001",
+      "timestamp": "2026-05-05T00:12:00Z",
+      "source_service": "SocioProphet/prophet-platform"
+    },
+    {
+      "schema_version": "0.1.0",
+      "decision_evidence_id": "de_policy_block_decision_001",
+      "operation_id": "op_memory_ingest_001",
+      "decision_id": "decision_memory_scope_001",
+      "decision_type": "memory_namespace_scope",
+      "selected_option": "reject",
+      "actor": {
+        "actor_type": "user",
+        "actor_id": "user_local_demo",
+        "display_name": "Local Demo User"
+      },
+      "command": "ResolveDecision",
+      "result": "success",
+      "reason": "Memory namespace scope requested exceeded user preferences. Rejected to preserve privacy boundary.",
+      "trace_id": "trace_memory_ingest_001",
+      "span_id": "span_decision_002",
+      "timestamp": "2026-05-05T00:30:15Z",
+      "source_service": "SocioProphet/prophet-platform"
+    }
+  ]
+}
