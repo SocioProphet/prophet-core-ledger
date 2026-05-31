@@ -1,0 +1,30 @@
+{
+  "schema_version": "0.1.0",
+  "record_type": "WallGuardLedgerEvent",
+  "event_id": "wallguard-ledger-event:cross-wall-denied-001",
+  "event_type": "wall_collaboration",
+  "wall_decision_id": "wallguard-decision://cross-wall-collaboration-deny-001",
+  "wall_decision_outcome": "deny",
+  "reason_code": "cross_wall_denied",
+  "policy_ref": "policy-fabric://wallguard.professional-workroom.v0",
+  "policy_version": "0.1.0",
+  "subject_ref": "agent-wall-context://agent-alpha/client-a/matter-x",
+  "action": "collaborate",
+  "resource_refs": ["agent-wall-context://agent-beta/client-b/matter-y"],
+  "resource_label_summary": {
+    "client_ref": "client://client-b",
+    "matter_ref": "matter://client-b/matter-y",
+    "wall_ref": "wall://client-b/matter-y",
+    "classification": "wall_restricted"
+  },
+  "context_ref": "workroom://client-a/matter-x",
+  "destination_ref": "agent-wall-context://agent-beta/client-b/matter-y",
+  "enforcement_point": "SocioProphet/agentplane#252",
+  "receipt_visibility_class": "internal",
+  "contains_restricted_payload": false,
+  "redaction_summary": "Denied collaboration event stores refs and reason only.",
+  "residual_restrictions": ["wall://client-a/matter-x", "wall://client-b/matter-y"],
+  "evidence_refs": ["SocioProphet/agentplane#252"],
+  "recorded_at": "2026-05-31T00:00:00Z",
+  "source_service": "SocioProphet/agentplane"
+}
