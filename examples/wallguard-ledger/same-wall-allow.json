@@ -1,0 +1,30 @@
+{
+  "schema_version": "0.1.0",
+  "record_type": "WallGuardLedgerEvent",
+  "event_id": "wallguard-ledger-event:same-wall-allow-001",
+  "event_type": "wall_retrieval",
+  "wall_decision_id": "wallguard-decision://same-wall-retrieval-allow-001",
+  "wall_decision_outcome": "allow",
+  "reason_code": "same_wall_allowed",
+  "policy_ref": "policy-fabric://wallguard.professional-workroom.v0",
+  "policy_version": "0.1.0",
+  "subject_ref": "agent-wall-context://agent-alpha/client-a/matter-x",
+  "action": "retrieve",
+  "resource_refs": ["resource://client-a/matter-x/doc-001"],
+  "resource_label_summary": {
+    "client_ref": "client://client-a",
+    "matter_ref": "matter://client-a/matter-x",
+    "wall_ref": "wall://client-a/matter-x",
+    "classification": "wall_restricted"
+  },
+  "context_ref": "workroom://client-a/matter-x",
+  "destination_ref": "workroom://client-a/matter-x",
+  "enforcement_point": "SocioProphet/sherlock-search#61",
+  "receipt_visibility_class": "internal",
+  "contains_restricted_payload": false,
+  "redaction_summary": "No raw payload content stored in ledger event.",
+  "residual_restrictions": ["wall://client-a/matter-x"],
+  "evidence_refs": ["SocioProphet/sherlock-search#61"],
+  "recorded_at": "2026-05-31T00:00:00Z",
+  "source_service": "SocioProphet/sherlock-search"
+}
