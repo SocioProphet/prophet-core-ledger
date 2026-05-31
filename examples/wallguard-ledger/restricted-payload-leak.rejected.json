@@ -1,0 +1,30 @@
+{
+  "schema_version": "0.1.0",
+  "record_type": "WallGuardLedgerEvent",
+  "event_id": "wallguard-ledger-event:restricted-payload-leak-invalid-001",
+  "event_type": "wall_clean_room_release",
+  "wall_decision_id": "wallguard-decision://clean-room-invalid-payload-001",
+  "wall_decision_outcome": "clean_room_release_allowed",
+  "reason_code": "clean_room_release_allowed",
+  "policy_ref": "policy-fabric://wallguard.professional-workroom.v0",
+  "policy_version": "0.1.0",
+  "subject_ref": "agent-wall-context://agent-alpha/client-a/matter-x",
+  "action": "clean_room_release",
+  "resource_refs": ["resource://client-a/matter-x/doc-001"],
+  "resource_label_summary": {
+    "client_ref": "client://client-a",
+    "matter_ref": "matter://client-a/matter-x",
+    "wall_ref": "wall://client-a/matter-x",
+    "classification": "wall_restricted"
+  },
+  "context_ref": "workroom://client-a/matter-x",
+  "destination_ref": "workroom://firm/approved-knowledge",
+  "enforcement_point": "SocioProphet/holmes#13",
+  "receipt_visibility_class": "public",
+  "contains_restricted_payload": true,
+  "redaction_summary": "Intentionally invalid: ledger event admits restricted payload leakage.",
+  "residual_restrictions": [],
+  "evidence_refs": ["SocioProphet/holmes#13"],
+  "recorded_at": "2026-05-31T00:00:00Z",
+  "source_service": "SocioProphet/holmes"
+}
