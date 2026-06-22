@@ -1,0 +1,13 @@
+{
+  "ledger_entry_id": "ledger:feature-promotion:0001",
+  "entry_type": "FEATURE_PROMOTION_EVENT",
+  "schema_ref": "https://schemas.socioprophet.org/prophet/decision-ledger-entry.v0.1.schema.json",
+  "feature_id": "gaia.weather.15_minute_forecast",
+  "source_artifact_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "contract_ref": "https://schemas.socioprophet.org/prophet/feature-registry-entry.v0.1.schema.json",
+  "policy_id": "decision-world-signal-policy@0.1.0",
+  "promotion_state": "REVIEW",
+  "responsible_actor": "actor:contract-reviewer",
+  "created_at": "2026-05-06T00:00:00Z",
+  "replay_instructions": "Re-validate the feature registry entry against its contract, source artifact hash, and policy version."
+}
