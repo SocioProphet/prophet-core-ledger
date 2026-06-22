@@ -1,0 +1,44 @@
+{
+  "_example": "operation-cancel",
+  "_description": "OperationEvidenceRecord example for a user-requested cancel and corresponding CompensationEvidence.",
+  "evidence_records": [
+    {
+      "schema_version": "0.1.0",
+      "evidence_record_id": "er_op_cancel_001",
+      "operation_id": "op_sync_cancel_001",
+      "operation_phase": "cancel",
+      "actor": {
+        "actor_type": "user",
+        "actor_id": "user_local_demo",
+        "display_name": "Local Demo User"
+      },
+      "command": "CancelOperation",
+      "result": "canceled",
+      "reason": "user_requested_cancel",
+      "trace_id": "trace_sync_cancel_001",
+      "span_id": "span_cancel_001",
+      "timestamp": "2026-05-05T00:15:20Z",
+      "source_service": "SocioProphet/prophet-platform"
+    }
+  ],
+  "compensation_evidence": [
+    {
+      "schema_version": "0.1.0",
+      "compensation_evidence_id": "comp_ev_001",
+      "operation_id": "op_sync_cancel_001",
+      "compensation_type": "rollback",
+      "compensated_task_ids": ["task_sync_stage_001", "task_sync_transfer_001"],
+      "actor": {
+        "actor_type": "system",
+        "actor_id": "operation-runtime"
+      },
+      "command": "CompensateOperation",
+      "result": "compensated",
+      "reason": "operation_canceled_by_user",
+      "trace_id": "trace_sync_cancel_001",
+      "span_id": "span_compensate_001",
+      "timestamp": "2026-05-05T00:15:22Z",
+      "source_service": "SocioProphet/prophet-platform"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "_example": "artifact-admission",
+  "_description": "ArtifactAdmissionEvidence showing artifact admitted through all gates (happy path) and one quarantined due to secret detection.",
+  "admission_evidence": [
+    {
+      "schema_version": "0.1.0",
+      "admission_evidence_id": "ae_readme_admit_001",
+      "operation_id": "op_upload_001",
+      "artifact_id": "artifact_readme_001",
+      "task_id": "task_upload_001",
+      "admission_state": "admitted",
+      "actor": {
+        "actor_type": "system",
+        "actor_id": "artifact-admission-runtime"
+      },
+      "command": "AdmitArtifact",
+      "result": "success",
+      "gate_results": [
+        {
+          "gate_id": "gate_upload_metadata_001",
+          "gate_type": "metadata.required",
+          "status": "passed",
+          "explanation": "All required metadata fields present."
+        },
+        {
+          "gate_id": "gate_upload_security_001",
+          "gate_type": "security.secret_detected",
+          "status": "passed",
+          "explanation": "No secrets detected in artifact content."
+        }
+      ],
+      "trace_id": "trace_upload_001",
+      "span_id": "span_admit_001",
+      "timestamp": "2026-05-05T00:00:08Z",
+      "source_service": "SocioProphet/prophet-platform"
+    },
+    {
+      "schema_version": "0.1.0",
+      "admission_evidence_id": "ae_config_quarantine_001",
+      "operation_id": "op_import_policy_001",
+      "artifact_id": "artifact_config_001",
+      "task_id": "task_import_config_001",
+      "admission_state": "quarantined",
+      "actor": {
+        "actor_type": "system",
+        "actor_id": "artifact-admission-runtime"
+      },
+      "command": "QuarantineArtifact",
+      "result": "failure",
+      "reason": "security.secret_detected: API key pattern found in artifact content",
+      "gate_results": [
+        {
+          "gate_id": "gate_import_secret_001",
+          "gate_type": "security.secret_detected",
+          "status": "blocking",
+          "explanation": "API key pattern detected. Artifact quarantined pending workspace_owner review."
+        }
+      ],
+      "trace_id": "trace_import_policy_001",
+      "span_id": "span_quarantine_001",
+      "timestamp": "2026-05-05T00:20:05Z",
+      "source_service": "SocioProphet/prophet-platform"
+    }
+  ]
+}

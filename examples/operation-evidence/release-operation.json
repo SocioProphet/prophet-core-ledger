@@ -1,0 +1,29 @@
+{
+  "_example": "release-operation",
+  "_description": "ReleaseOperationEvidence for a package release operation completing with all required artifacts.",
+  "release_evidence": [
+    {
+      "schema_version": "0.1.0",
+      "release_evidence_id": "re_package_release_001",
+      "operation_id": "op_release_package_001",
+      "task_id": "task_release_evidence_001",
+      "release_type": "package.homebrew_formula",
+      "release_artifact_ids": [
+        "artifact_formula_001",
+        "artifact_checksum_001",
+        "artifact_release_evidence_001"
+      ],
+      "actor": {
+        "actor_type": "system",
+        "actor_id": "release-worker"
+      },
+      "command": "StartOperation",
+      "result": "success",
+      "source_ref": "git://SocioProphet/prophet-platform@v0.1.0",
+      "trace_id": "trace_release_package_001",
+      "span_id": "span_release_001",
+      "timestamp": "2026-05-05T01:30:35Z",
+      "source_service": "SocioProphet/prophet-platform"
+    }
+  ]
+}
